@@ -1,0 +1,6 @@
+tranco-lists/*
+temp/*
+hispar-list-*
+
+__pycache__
+src/config/__init__.py
