@@ -31,8 +31,11 @@ while len(uniques) < target and tries < target/PAGE_SIZE * 5:
         "offset": offset,
         "responseFilter": ["Webpages"],
     }
-    response = requests.get(bing_url, headers=headers, params=params)
-    response.raise_for_status()
+    try:
+        response = requests.get(bing_url, headers=headers, params=params, timeout=5)
+        response.raise_for_status()
+    except:
+        break
     search_results = response.json()
     if "webPages" not in search_results:
         break
