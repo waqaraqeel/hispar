@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ENGINE=$1
 TRANCO_LIST=$2
 DOMAINS=$3
@@ -16,3 +16,6 @@ while [[ `wc -l < $OUTPUT` -lt $TARGET ]]; do
     $ENGINE $domain $URLS_PER_DOMAIN >> $OUTPUT
     n=$(($n + 1))
 done
+
+TARGET=$(($TARGET + 1))
+sed -i "${TARGET},$ d" $OUTPUT
