@@ -17,11 +17,6 @@ hispar-list-%: $(SRC)/get_list.sh $(ENGINE) $(TRANCO_DIR)/%
 	@rm -f $@ && touch $@
 	$^ $(DOMAINS) $(URLS_PER_DOMAIN) $@
 
-test:
-	while [[`wc -l toot` < 10]]; do \
-		echo 4 >> toot; \
-	done
-
 $(TRANCO_DIR)/%:
 	@wget $(TRANCO_URL) -O $(TMP)/list.zip
 	@unzip $(TMP)/list.zip -d $(TMP)/

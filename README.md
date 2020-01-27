@@ -3,6 +3,11 @@ Hispar 100K is a research-oriented list of web pages that can be used for
 Internet measurements. It is the _first_ top list to provide URLs, and not just
 domain names.
 
+An example list, generated on January 27<sup>th</sup> 2017, has been included.
+The first column is the [Tranco](https://tranco-list.eu) rank of the domain, the
+second column is the Bing search result rank of the URL, and the third rank is
+the URL itself.
+
 ### Download
 We prepare weekly lists of Top 100K URLs that can be downloaded
 [here](http://hispar.cs.duke.edu).
