@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 import sys
 import time
-from config import bing_key
+from config import bing_key, bing_url
 
 import requests
 
-search_url = "https://api.cognitive.microsoft.com/bing/v7.0/search"
 headers = {"Ocp-Apim-Subscription-Key": bing_key}
 
 site_rank = int(sys.argv[1])
@@ -32,7 +31,7 @@ while len(uniques) < target and tries < target/PAGE_SIZE * 5:
         "offset": offset,
         "responseFilter": ["Webpages"],
     }
-    response = requests.get(search_url, headers=headers, params=params)
+    response = requests.get(bing_url, headers=headers, params=params)
     response.raise_for_status()
     search_results = response.json()
     if "webPages" not in search_results:
@@ -45,7 +44,7 @@ while len(uniques) < target and tries < target/PAGE_SIZE * 5:
     print(f"Gathered {len(uniques)} results", file=sys.stderr)
     offset += len(search_results["webPages"]["value"])
     tries += 1
-    time.sleep(1)
+    time.sleep(0.05)
 
 for r in results[:target]:
     print(f"{site_rank} {r[0]} {r[1]}")

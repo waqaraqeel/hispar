@@ -13,21 +13,26 @@ TODAY=$(shell date +'%y-%m-%d')
 all: hispar-list-$(TODAY)
 .SECONDARY:
 
-hispar-list-%: $(ENGINE) $(TRANCO_DIR)/% 
-	@rm -f $@
-	@head -n $(DOMAINS) $(TRANCO_DIR)/$* | tr -d '\r' | tr ',' ' ' | \
-		while read domain; do \
-			$< $$domain $(URLS_PER_DOMAIN) >> $@; \
-		done
+hispar-list-%: $(SRC)/get_list.sh $(ENGINE) $(TRANCO_DIR)/% 
+	@rm -f $@ && touch $@
+	$^ $(DOMAINS) $(URLS_PER_DOMAIN) $@
+
+test:
+	while [[`wc -l toot` < 10]]; do \
+		echo 4 >> toot; \
+	done
 
 $(TRANCO_DIR)/%:
 	@wget $(TRANCO_URL) -O $(TMP)/list.zip
-	@unzip $(TMP)/list.zip -d $(TMP)/ && mv $(TMP)/top-1m.csv $@
-	@rm $(TMP)/list.zip
+	@unzip $(TMP)/list.zip -d $(TMP)/
+	@tr -d '\r' < $(TMP)/top-1m.csv | tr ',' ' ' > $@
+	@rm $(TMP)/list.zip $(TMP)/top-1m.csv
 
 install:
 	@apt-get install python3 python3-pip
 	@pip3 install requests
+	@mkdir -p $(TMP)
+	@mkdir -p $(TRANCO_DIR)
 
 clean:
 	@rm -f hispar-list-$(TODAY) 
