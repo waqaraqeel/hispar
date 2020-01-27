@@ -5,7 +5,7 @@ domain names.
 
 An example list, generated on January 27<sup>th</sup> 2017, has been included.
 The first column is the [Tranco](https://tranco-list.eu) rank of the domain, the
-second column is the Bing search result rank of the URL, and the third rank is
+second column is the Bing search result rank of the URL, and the third column is
 the URL itself.
 
 ### Download
