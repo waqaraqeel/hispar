@@ -31,8 +31,8 @@ $(TRANCO_DIR)/%:
 install:
 	@apt-get install python3 python3-pip
 	@pip3 install requests
-	@mkdir -p $(TMP)
-	@mkdir -p $(TRANCO_DIR)
+	@sudo -u $$SUDO_USER mkdir -p $(TMP)
+	@sudo -u $$SUDO_USER mkdir -p $(TRANCO_DIR)
 
 clean:
 	@rm -f hispar-list-$(TODAY) 
