@@ -5,7 +5,10 @@ from config import bing_key, bing_url
 
 import requests
 
-headers = {"Ocp-Apim-Subscription-Key": bing_key}
+headers = {
+    "Ocp-Apim-Subscription-Key": bing_key,
+    "BingAPIs-Market": "en-US"
+}
 
 site_rank = int(sys.argv[1])
 search_term = "site:" + sys.argv[2]
@@ -15,18 +18,17 @@ target = int(sys.argv[3])
 # search_term = "site:twitter.com"
 # target = 1000
 
-PAGE_SIZE = min(target, 50)
+PAGE_SIZE = 50
 offset = 0
-tries = 0
 uniques = set()
 results = []
 
 print(f"Searching {search_term}", file=sys.stderr)
-while len(uniques) < target and tries < target/PAGE_SIZE * 5:
+while len(uniques) < target:
     params = {
+        "mkt": "en-US",
+        "setLang": "en",
         "q": search_term,
-        "textDecorations": True,
-        "textFormat": "HTML",
         "count": PAGE_SIZE,
         "offset": offset,
         "responseFilter": ["Webpages"],
@@ -44,10 +46,12 @@ while len(uniques) < target and tries < target/PAGE_SIZE * 5:
         if url not in uniques:
             uniques.add(ans["url"])
             results.append((offset + rank + 1, url))
+
     print(f"Gathered {len(uniques)} results", file=sys.stderr)
+    if len(search_results["webPages"]["value"]) < PAGE_SIZE - 5:
+        break
     offset += len(search_results["webPages"]["value"])
-    tries += 1
-    time.sleep(0.05)
+    time.sleep(0.02)
 
 for r in results[:target]:
     print(f"{site_rank} {r[0]} {r[1]}")
