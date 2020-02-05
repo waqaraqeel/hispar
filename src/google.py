@@ -16,12 +16,11 @@ if target > MAX_RESULTS:
 
 PAGE_SIZE = min(target, 10)
 offset = 0
-tries = 0
 uniques = set()
 results = []
 
 print(f"Searching {search_term}", file=sys.stderr)
-while len(uniques) < target and tries < target/PAGE_SIZE * 5 and offset + PAGE_SIZE < MAX_RESULTS:
+while len(uniques) < target and offset + PAGE_SIZE < MAX_RESULTS:
     params = {
         "key": google_key,
         "cx": google_cx,
@@ -39,9 +38,10 @@ while len(uniques) < target and tries < target/PAGE_SIZE * 5 and offset + PAGE_S
             uniques.add(url)
             results.append((offset + rank + 1, url))
     print(f"Gathered {len(uniques)} results", file=sys.stderr)
+    if len(search_results["items"]) < PAGE_SIZE - 5:
+        break
     offset += len(search_results["items"])
-    tries += 1
-    time.sleep(1)
+    time.sleep(0.05)
 
 for r in results[:target]:
     print(f"{site_rank} {r[0]} {r[1]}")
