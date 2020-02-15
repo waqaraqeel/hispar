@@ -16,7 +16,7 @@ lang_loc = "language:en loc:us"
 search_term = "site:" + " ".join((sys.argv[2], file_ex, lang_loc))
 target = int(sys.argv[3])
 
-PAGE_SIZE = 50
+PAGE_SIZE = min(50, target + 5)
 offset = 0
 uniques = set()
 results = []
