@@ -26,6 +26,8 @@ while len(uniques) < target and offset + PAGE_SIZE < MAX_RESULTS:
         "cx": google_cx,
         "q": search_term,
         "gl": "us",
+        "cr": "countryUS",
+        "lr": "lang_en",
         "num": PAGE_SIZE,
         "start": offset
     }
