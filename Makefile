@@ -5,8 +5,8 @@ SRC=src
 GOOGLE=$(SRC)/google.py
 BING=$(SRC)/bing.py
 
-DOMAINS=4000
-URLS_PER_DOMAIN=25
+DOMAINS=1000
+URLS_PER_DOMAIN=100
 ENGINE=$(BING) # or $(BING)
 
 TODAY=$(shell date +'%y-%m-%d')

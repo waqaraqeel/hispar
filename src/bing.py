@@ -11,12 +11,10 @@ headers = {
 }
 
 site_rank = int(sys.argv[1])
-search_term = "site:" + sys.argv[2]
+file_ex = " ".join("-filetype:" + f for f in ("pdf", "doc", "txt"))
+lang_loc = "language:en loc:us"
+search_term = "site:" + " ".join((sys.argv[2], file_ex, lang_loc))
 target = int(sys.argv[3])
-
-# site_rank = 2
-# search_term = "site:twitter.com"
-# target = 1000
 
 PAGE_SIZE = 50
 offset = 0
