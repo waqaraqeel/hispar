@@ -18,7 +18,6 @@ target = int(sys.argv[3])
 PAGE_SIZE = min(50, target + 5)
 offset = 0
 uniques = set()
-# results = []
 
 print(f"Getting landing page for {site}", file=sys.stderr)
 landing = ""
@@ -30,6 +29,7 @@ except:
 
 print(f"Searching {search_term}", file=sys.stderr)
 printed = 0
+landing_found = False
 
 while printed < target:
     params = {
@@ -54,6 +54,9 @@ while printed < target:
             uniques.add(ans["url"])
             if ans["url"] == landing:
                 print(f"{site_rank} 0 {url}")
+                landing_found = True
+            elif printed == target - 1 and landing and not landing_found:
+                print(f"{site_rank} 0 {landing}")
             else:
                 print(f"{site_rank} {offset + rank + 1} {url}")
             printed += 1
