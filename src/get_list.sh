@@ -10,7 +10,7 @@ head -n $DOMAINS $TRANCO_LIST | while read domain; do
     $ENGINE $domain $URLS_PER_DOMAIN >> $OUTPUT
 done
 
-n=$DOMAINS
+n=$(($DOMAINS + 1))
 while [[ `wc -l < $OUTPUT` -lt $TARGET ]]; do
     domain=`sed -n "${n}p" $TRANCO_LIST`
     $ENGINE $domain $URLS_PER_DOMAIN >> $OUTPUT

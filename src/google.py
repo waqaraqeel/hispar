@@ -26,6 +26,8 @@ while len(uniques) < target and offset + PAGE_SIZE < MAX_RESULTS:
         "cx": google_cx,
         "q": search_term,
         "gl": "us",
+        "cr": "countryUS",
+        "lr": "lang_en",
         "num": PAGE_SIZE,
         "start": offset
     }
@@ -41,7 +43,7 @@ while len(uniques) < target and offset + PAGE_SIZE < MAX_RESULTS:
     if len(search_results["items"]) < PAGE_SIZE - 5:
         break
     offset += len(search_results["items"])
-    time.sleep(0.05)
+    time.sleep(1)
 
 for r in results[:target]:
     print(f"{site_rank} {r[0]} {r[1]}")
