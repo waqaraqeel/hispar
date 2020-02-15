@@ -1,28 +1,37 @@
 #!/usr/bin/env python3
 import sys
 import time
+import requests
 from config import bing_key, bing_url
 
 import requests
 
-headers = {
-    "Ocp-Apim-Subscription-Key": bing_key,
-    "BingAPIs-Market": "en-US"
-}
+headers = {"Ocp-Apim-Subscription-Key": bing_key, "BingAPIs-Market": "en-US"}
 
 site_rank = int(sys.argv[1])
+site = sys.argv[2]
 file_ex = " ".join("-filetype:" + f for f in ("pdf", "doc", "txt"))
 lang_loc = "language:en loc:us"
-search_term = "site:" + " ".join((sys.argv[2], file_ex, lang_loc))
+search_term = "site:" + " ".join((site, file_ex, lang_loc))
 target = int(sys.argv[3])
 
 PAGE_SIZE = min(50, target + 5)
 offset = 0
 uniques = set()
-results = []
+# results = []
+
+print(f"Getting landing page for {site}", file=sys.stderr)
+landing = ""
+try:
+    resp = requests.get(f"http://{site}")
+    landing = resp.url
+except:
+    pass
 
 print(f"Searching {search_term}", file=sys.stderr)
-while len(uniques) < target:
+printed = 0
+
+while printed < target:
     params = {
         "mkt": "en-US",
         "setLang": "en",
@@ -43,13 +52,16 @@ while len(uniques) < target:
         url = ans["url"]
         if url not in uniques:
             uniques.add(ans["url"])
-            results.append((offset + rank + 1, url))
+            if ans["url"] == landing:
+                print(f"{site_rank} 0 {url}")
+            else:
+                print(f"{site_rank} {offset + rank + 1} {url}")
+            printed += 1
+            if printed >= target:
+                break
 
     print(f"Gathered {len(uniques)} results", file=sys.stderr)
     if len(search_results["webPages"]["value"]) < PAGE_SIZE - 5:
         break
     offset += len(search_results["webPages"]["value"])
     time.sleep(0.02)
-
-for r in results[:target]:
-    print(f"{site_rank} {r[0]} {r[1]}")
