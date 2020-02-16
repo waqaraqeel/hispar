@@ -31,10 +31,9 @@ if not landing:
     exit(0)
 
 print(f"Searching {search_term}", file=sys.stderr)
-printed = 0
 landing_found = False
 
-while printed < target:
+while len(uniques) < target:
     params = {
         "mkt": "en-US",
         "setLang": "en",
@@ -60,12 +59,11 @@ while printed < target:
             if ans["url"] == landing:
                 print(f"{site_rank} 0 {url}")
                 landing_found = True
-            elif printed == target - 1 and landing and not landing_found:
+            elif len(uniques) == target - 1 and landing and not landing_found:
                 break
             else:
                 print(f"{site_rank} {offset + rank + 1} {url}")
-            printed += 1
-            if printed >= target:
+            if len(uniques) >= target:
                 break
 
     print(f"Gathered {len(uniques)} results", file=sys.stderr)
