@@ -26,6 +26,9 @@ try:
     landing = resp.url
 except:
     pass
+if not landing:
+    print("Could not get landing page", file=sys.stderr)
+    exit(0)
 
 print(f"Searching {search_term}", file=sys.stderr)
 printed = 0
