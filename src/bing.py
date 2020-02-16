@@ -22,7 +22,7 @@ uniques = set()
 print(f"Getting landing page for {site}", file=sys.stderr)
 landing = ""
 try:
-    resp = requests.get(f"http://{site}")
+    resp = requests.get(f"http://{site}", timeout=5)
     landing = resp.url
 except:
     pass
