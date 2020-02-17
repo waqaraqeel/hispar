@@ -32,6 +32,7 @@ if not landing:
 
 print(f"Searching {search_term}", file=sys.stderr)
 landing_found = False
+last_len = 0
 
 while len(uniques) < target:
     params = {
@@ -67,8 +68,9 @@ while len(uniques) < target:
                 break
 
     print(f"Gathered {len(uniques)} results", file=sys.stderr)
-    if len(search_results["webPages"]["value"]) < PAGE_SIZE - 5:
+    if len(uniques) - last_len  < PAGE_SIZE / 3:
         break
+    last_len = len(uniques)
     offset += len(search_results["webPages"]["value"])
     time.sleep(0.02)
 
