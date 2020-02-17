@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import time
-import requests
 from config import bing_key, bing_url
 
 import requests
@@ -56,8 +55,8 @@ while len(uniques) < target:
     for rank, ans in enumerate(search_results["webPages"]["value"]):
         url = ans["url"]
         if url not in uniques:
-            uniques.add(ans["url"])
-            if ans["url"] == landing:
+            uniques.add(url)
+            if url == landing:
                 print(f"{site_rank} 0 {url}")
                 landing_found = True
             elif len(uniques) == target - 1 and landing and not landing_found:

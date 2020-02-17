@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import time
-from config import google_key, google_cx
+from config import google_key, google_cx, google_ley, google_dx
 
 import requests
 
@@ -9,21 +9,38 @@ search_url = "https://www.googleapis.com/customsearch/v1"
 MAX_RESULTS = 100
 
 site_rank = int(sys.argv[1])
-search_term = "site:" + sys.argv[2]
+KEY, CX = (google_key, google_cx) if site_rank < 5000 else (google_ley, google_dx)
+
+site = sys.argv[2]
+file_ex = " ".join("-filetype:" + f for f in ("pdf", "doc", "txt"))
+search_term = "site:" + " ".join((site, file_ex))
 target = int(sys.argv[3])
 if target > MAX_RESULTS:
     sys.exit(f"More than {MAX_RESULTS} results for one query not supported")
 
-PAGE_SIZE = min(target, 10)
+PAGE_SIZE = min(10, target + 5)
 offset = 0
 uniques = set()
-results = []
 
+print(f"Getting landing page for {site}", file=sys.stderr)
+landing = ""
+try:
+    resp = requests.get(f"http://{site}", timeout=5)
+    landing = resp.url
+except:
+    pass
+if not landing:
+    print("Could not get landing page", file=sys.stderr)
+    exit(0)
+    
 print(f"Searching {search_term}", file=sys.stderr)
-while len(uniques) < target and offset + PAGE_SIZE < MAX_RESULTS:
+landing_found = False
+last_len = 0
+
+while len(uniques) < target:
     params = {
-        "key": google_key,
-        "cx": google_cx,
+        "key": KEY,
+        "cx": CX,
         "q": search_term,
         "gl": "us",
         "cr": "countryUS",
@@ -31,19 +48,37 @@ while len(uniques) < target and offset + PAGE_SIZE < MAX_RESULTS:
         "num": PAGE_SIZE,
         "start": offset
     }
-    response = requests.get(search_url, params=params)
-    response.raise_for_status()
+    try:
+        response = requests.get(search_url, params=params, timeout=5)
+        response.raise_for_status()
+    except:
+        break
+
     search_results = response.json()
+    if "items" not in search_results:
+        break
+
     for rank, ans in enumerate(search_results["items"]):
         url = ans["link"]
         if url not in uniques:
             uniques.add(url)
-            results.append((offset + rank + 1, url))
-    print(f"Gathered {len(uniques)} results", file=sys.stderr)
-    if len(search_results["items"]) < PAGE_SIZE - 5:
-        break
-    offset += len(search_results["items"])
-    time.sleep(1)
+            if url == landing:
+                print(f"{site_rank} 0 {url}")
+                landing_found = True
+            elif len(uniques) == target - 1 and landing and not landing_found:
+                break
+            else:
+                print(f"{site_rank} {offset + rank + 1} {url}")
+            if len(uniques) >= target:
+                break
 
-for r in results[:target]:
-    print(f"{site_rank} {r[0]} {r[1]}")
+    print(f"Gathered {len(uniques)} results", file=sys.stderr)
+    if len(uniques) - last_len  < PAGE_SIZE / 3:
+        break
+    last_len = len(uniques)
+    offset += len(search_results["items"])
+    time.sleep(0.02)
+
+
+if landing and not landing_found:
+    print(f"{site_rank} 0 {landing}")
