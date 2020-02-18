@@ -5,9 +5,9 @@ SRC=src
 GOOGLE=$(SRC)/google.py
 BING=$(SRC)/bing.py
 
-DOMAINS=1000
-URLS_PER_DOMAIN=100
-ENGINE=$(BING) # or $(BING)
+DOMAINS=2000
+URLS_PER_DOMAIN=50
+ENGINE=$(GOOGLE) # or $(BING)
 
 TODAY=$(shell date +'%y-%m-%d')
 all: hispar-list-$(TODAY)
