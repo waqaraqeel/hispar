@@ -19,7 +19,7 @@ if target > MAX_RESULTS:
     sys.exit(f"More than {MAX_RESULTS} results for one query not supported")
 
 PAGE_SIZE = min(10, target + 5)
-offset = 0
+offset = 1
 uniques = set()
 
 print(f"Getting landing page for {site}", file=sys.stderr)
@@ -68,7 +68,7 @@ while len(uniques) < target:
             elif len(uniques) == target - 1 and landing and not landing_found:
                 break
             else:
-                print(f"{site_rank} {offset + rank + 1} {url}")
+                print(f"{site_rank} {offset + rank} {url}")
             if len(uniques) >= target:
                 break
 
