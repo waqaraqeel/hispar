@@ -5,7 +5,7 @@ SRC=src
 GOOGLE=$(SRC)/google.py
 BING=$(SRC)/bing.py
 
-DOMAINS=2000
+DOMAINS=500
 URLS_PER_DOMAIN=50
 ENGINE=$(GOOGLE) # or $(BING)
 

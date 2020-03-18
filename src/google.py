@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import time
-from config import google_key, google_cx, google_ley, google_dx
+from config import google_key, google_cx
 
 import requests
 
@@ -9,7 +9,7 @@ search_url = "https://www.googleapis.com/customsearch/v1"
 MAX_RESULTS = 100
 
 site_rank = int(sys.argv[1])
-KEY, CX = (google_key, google_cx) if site_rank < 5000 else (google_ley, google_dx)
+KEY, CX = google_key, google_cx
 
 site = sys.argv[2]
 file_ex = " ".join("-filetype:" + f for f in ("pdf", "doc", "txt"))
@@ -77,7 +77,7 @@ while len(uniques) < target:
         break
     last_len = len(uniques)
     offset += len(search_results["items"])
-    time.sleep(0.02)
+    time.sleep(2)
 
 
 if landing and not landing_found:
