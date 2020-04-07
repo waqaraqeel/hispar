@@ -2,6 +2,7 @@ ALEXA_URL=http://s3.amazonaws.com/alexa-static/top-1m.csv.zip
 ALEXA_DIR=alexa-lists
 TMP=temp
 SRC=src
+DESTINATION=/home/waqar/hispar.cs.duke.edu/archive
 GOOGLE=$(SRC)/google.py
 BING=$(SRC)/bing.py
 
@@ -12,20 +13,18 @@ ENGINE=$(GOOGLE) # or $(BING)
 TODAY=$(shell date +'%y-%m-%d')
 YESTERDAY=$(shell date -d '-1 day' +'%y-%m-%d')
 
-all: hispar-list-$(TODAY)
+today: hispar-list-$(TODAY)
 .SECONDARY:
 
 
 hispar-list-%: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/% 
-	$^ $(DOMAINS) $(URLS_PER_DOMAIN) $@ 1
+	$^ $(DOMAINS) $(URLS_PER_DOMAIN) $@ 1 50000
 
-second1000: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/$(YESTERDAY) 
+yesterday: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/$(YESTERDAY)
 	OFFSET=$$((`tail -n 1 hispar-list-$(YESTERDAY) | cut -d" " -f1` + 1)) && \
-	$^ $(DOMAINS) $(URLS_PER_DOMAIN) hispar-list-$(YESTERDAY) $$OFFSET
-
-finalize: second1000
-	TARGET=$$(($(DOMAINS) * $(URLS_PER_DOMAIN) * 2 + 1)) && \
-	sed -i "$$TARGET,$$ d" hispar-list-$(YESTERDAY)
+	$^ $(DOMAINS) $(URLS_PER_DOMAIN) hispar-list-$(YESTERDAY) $$OFFSET 100000
+	xz hispar-list-$(YESTERDAY)
+	mv hispar-list-$(YESTERDAY).xz $(DESTINATION)/
 
 $(ALEXA_DIR)/%:
 	@wget $(ALEXA_URL) -O $(TMP)/list.zip
