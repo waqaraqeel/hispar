@@ -33,6 +33,7 @@ if not landing:
     print("Could not get landing page", file=sys.stderr)
     exit(0)
     
+results = []
 print(f"Searching {search_term}", file=sys.stderr)
 landing_found = False
 last_len = 0
@@ -63,12 +64,14 @@ while len(uniques) < target:
         if url not in uniques:
             uniques.add(url)
             if url == landing:
-                print(f"{site_rank} 0 {url}")
+                results.append(f"{site_rank} 0 {url}")
+                # print(f"{site_rank} 0 {url}")
                 landing_found = True
             elif len(uniques) == target - 1 and landing and not landing_found:
                 break
             else:
-                print(f"{site_rank} {offset + rank} {url}")
+                results.append(f"{site_rank} {offset + rank} {url}")
+                # print(f"{site_rank} {offset + rank} {url}")
             if len(uniques) >= target:
                 break
 
@@ -77,8 +80,13 @@ while len(uniques) < target:
         break
     last_len = len(uniques)
     offset += len(search_results["items"])
-    time.sleep(2)
+    time.sleep(1)
 
 
 if landing and not landing_found:
-    print(f"{site_rank} 0 {landing}")
+    results.append(f"{site_rank} 0 {landing}")
+    # print(f"{site_rank} 0 {landing}")
+
+if len(results) > 10:
+    for r in results:
+        print(r)
