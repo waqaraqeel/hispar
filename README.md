@@ -38,23 +38,16 @@ Once you have the relevant credentials, please place them in
 `bing_url`.
 
 If you want to change the language or region settings for the search results,
-please change the relevant query parameters in `google.py` or `bing.py`.
+please change the relevant query parameters in `google.py` or `bing.py`. The
+number of domains to use, and the number of unique URLs to fetch for each domain
+can be configured in the `Makefile`. 
 
 To install the dependencies, simply run `sudo make install`. Otherwise, install
-`requests` using `pip`, and create the directories `temp` and `alexa-lists` in
-the current directory.
+`requests` using `pip` (`python3` is required), and create the directories
+`temp` and `alexa-lists` in the current directory.
 
 To generate a list of URLs from today's Alexa list, run `make today`. The
 generation is split into two parts because the Google API does not allow more
 than 10,000 API requests per day. Once the request cap has been restored (day
 changes in PST), run `make yesterday` to pick up from where it was paused
 previously.
-
-The number of domains to use, and the number of unique URLs to fetch for each
-domain can be configured in the `Makefile`. Google Custom Search API can also be
-used, although it is more expensive. Bing Web Search credentials can be obtained
-[here](https://azure.microsoft.com/en-us/services/cognitive-services/bing-web-search-api/).
-Google Custom Search setup guide can be found
-[here](https://developers.google.com/custom-search/docs/tutorial/introduction).
-Google Custom Search will have to be configured to search the entire web, and
-not just specific websites.
