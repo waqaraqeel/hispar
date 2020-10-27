@@ -20,18 +20,11 @@ today: hispar-list-$(TODAY)
 hispar-list-%: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/% 
 	$^ $(DOMAINS) $(URLS_PER_DOMAIN) $@ 1 50000
 
-yester-%: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/%
-	OFFSET=$$((`tail -n 1 hispar-list-$* | cut -d" " -f1` + 1)) && \
-	$^ $(DOMAINS) $(URLS_PER_DOMAIN) hispar-list-$* $$OFFSET 100000
-	zip -9 hispar-list-$*.zip hispar-list-$*
-	mv hispar-list-$*.zip $(DESTINATION)/
-
-
 yesterday: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/$(YESTERDAY)
 	OFFSET=$$((`tail -n 1 hispar-list-$(YESTERDAY) | cut -d" " -f1` + 1)) && \
 	$^ $(DOMAINS) $(URLS_PER_DOMAIN) hispar-list-$(YESTERDAY) $$OFFSET 100000
-	xz hispar-list-$(YESTERDAY)
-	mv hispar-list-$(YESTERDAY).xz $(DESTINATION)/
+	zip -9 hispar-list-$(YESTERDAY).zip hispar-list-$(YESTERDAY)
+	mv hispar-list-$(YESTERDAY).zip $(DESTINATION)/
 
 $(ALEXA_DIR)/%:
 	@wget $(ALEXA_URL) -O $(TMP)/list.zip
