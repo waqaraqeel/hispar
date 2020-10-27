@@ -23,8 +23,8 @@ hispar-list-%: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/%
 yester-%: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/%
 	OFFSET=$$((`tail -n 1 hispar-list-$* | cut -d" " -f1` + 1)) && \
 	$^ $(DOMAINS) $(URLS_PER_DOMAIN) hispar-list-$* $$OFFSET 100000
-	xz hispar-list-$*
-	mv hispar-list-$*.xz $(DESTINATION)/
+	zip -9 hispar-list-$*.zip hispar-list-$*
+	mv hispar-list-$*.zip $(DESTINATION)/
 
 
 yesterday: $(SRC)/get_list.sh $(ENGINE) $(ALEXA_DIR)/$(YESTERDAY)
